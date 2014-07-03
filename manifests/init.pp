@@ -94,7 +94,7 @@ class transmission (
   exec { 'stop daemon to update file':
     path      => $::path,
     cwd       => $transd,
-    command   => "/sbin/service transmission-daemon stop && /bin/cp -af ${transd}/settingz.json ${transd}/settings.json",
+    command   => "puppet resource service transmission-daemon ensure=stopped && /bin/cp -af ${transd}/settingz.json ${transd}/settings.json",
     unless    => 'diff -q settingz.json settings.json',
     subscribe => File['trans-config-shell'],
   }
