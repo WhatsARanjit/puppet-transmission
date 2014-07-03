@@ -31,13 +31,13 @@ Default: transmission
 
 ## Example Usage
 
-Install plexmediaserver:
+Install transmission:
 
 ```puppet
 include transmission
 ```
 
-Install plexmedia server with custom parameters:
+Install transmission with custom parameters:
 
 ```puppet
 class { 'transmission':
