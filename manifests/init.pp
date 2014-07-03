@@ -67,6 +67,12 @@ class transmission (
   $upload_slots_per_torrent       = $transmission::params::upload_slots_per_torrent,
   $utp_enabled                    = $transmission::params::utp_enabled,
 ) inherits transmission::params {
+  File {
+    ensure => directory,
+    owner  => $transuser,
+    group  => $transgroup,
+    mode   => '0644',
+  }
   user { $transuser:
     ensure  => present,
     home    => $transd,
@@ -86,8 +92,6 @@ class transmission (
   file { 'trans-config-shell':
     ensure  => file,
     path    => "${transd}/settingz.json",
-    owner   => $transuser,
-    group   => $transgroup,
     mode    => '0600',
     content => template("${module_name}/settings.json.erb"),
   }
@@ -101,5 +105,13 @@ class transmission (
   service { 'transmission-daemon':
     ensure    => running,
     subscribe => Exec['stop daemon to update file'],
+  }
+  if $download_dir == $incomplete_dir {
+    $dirs = $download_dir
+  } else {
+    $dirs = [ $download_dir, $incomplete_dir ]
+  }
+  file { $dirs:
+    require => Package['transmission-daemon'],
   }
 }
