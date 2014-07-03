@@ -10,9 +10,9 @@ class transmission::yum {
   staging::file { "rpmforge":
     source => "http://packages.sw.be/rpmforge-release/rpmforge-release-0.5.2-2.el${::operatingsystemmajrelease}.rf.${::architecture}.rpm",
     target => "/tmp/rpmforge-release-0.5.2-2.el${::operatingsystemmajrelease}.rf.${::architecture}.rpm",
-    before => Package['rpmforge'],
+    before => Package['rpmforge-release'],
   }
-  package { 'rpmforge':
+  package { 'rpmforge-release':
     ensure   => installed,
     provider => 'rpm',
     source   => "/tmp/rpmforge-release-0.5.2-2.el${::operatingsystemmajrelease}.rf.${::architecture}.rpm",
