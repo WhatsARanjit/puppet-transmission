@@ -66,4 +66,6 @@ class transmission::params {
   $umask                          = 18
   $upload_slots_per_torrent       = 14
   $utp_enabled                    = true
+  $watch_dir                      = '/home/transmission/torrents'
+  $watch_dir_enabled              = false
 }
