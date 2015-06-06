@@ -66,7 +66,20 @@ class transmission (
   $umask                          = $transmission::params::umask,
   $upload_slots_per_torrent       = $transmission::params::upload_slots_per_torrent,
   $utp_enabled                    = $transmission::params::utp_enabled,
+  $watch_dir                      = $transmission::params::watch_dir,
+  $watch_dir_enabled              = $transmission::params::watch_dir_enabled,
 ) inherits transmission::params {
+  case $::osfamily {
+    'RedHat': {
+      $pkgman = 'yum'
+    }
+    'Debian': {
+      $pkgman = 'apt'
+    }
+    default: {
+      $pkgman = 'unknown'
+    }
+  }
   File {
     ensure => directory,
     owner  => $transuser,
@@ -83,7 +96,7 @@ class transmission (
   group { $transgroup:
     ensure => present,
   }
-  class { 'transmission::yum': } ->
+  class { "transmission::$pkgman": } ->
   package { [ 'transmission','transmission-cli','transmission-common','transmission-daemon','transmission-gtk' ]:
     ensure  => installed,
     require => Yumrepo['geekery'],
